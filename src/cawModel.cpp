@@ -151,9 +151,9 @@ boost::any GitModel::data(const WModelIndex& index, int role) const
 	return object.name;
     } else if (role == DecorationRole) {
       if (object.type == Git::Blob)
-	return static_cast<const char*>("icons/git-blob.png");
+    return static_cast<const char*>("resources/icons/git-blob.png");
       else if (object.type == Git::Tree)
-	return static_cast<const char*>("icons/git-tree.png");
+    return static_cast<const char*>("resources/icons/git-tree.png");
     } else if (role == ContentsRole) {
       if (object.type == Git::Blob)
 	return git_.catFile(object.id);

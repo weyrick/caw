@@ -44,7 +44,7 @@ public:
   GitViewApplication(const WEnvironment& env) 
     : WApplication(env)
   {
-    useStyleSheet("caw.css");
+    useStyleSheet("resources/caw.css");
     setTitle("Git model example");
 
     const char *gitRepo = getenv("GITVIEW_REPOSITORY_PATH");
