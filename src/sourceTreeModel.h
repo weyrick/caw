@@ -7,6 +7,7 @@
 #define GIT_MODEL_H_
 
 #include <Wt/WAbstractItemModel>
+#include <corvus/pSourceManager.h>
 
 #include "Git.h"
 
@@ -46,14 +47,14 @@ public:
 
   /*! \brief Set the repository and load its 'master' revision.
    */
-  void setRepositoryPath(const std::string& repositoryPath);
+  void setConfigPath(const std::string& configPath);
 
   /*! \brief Load a particular revision.
    *
    * The revision name may be any revision accepted by git, by
    * git-rev-parse(1).
    */
-  void loadRevision(const std::string& revName);
+  //void loadRevision(const std::string& revName);
 
   /*! \brief Returns the parent index.
    *
@@ -103,6 +104,7 @@ public:
 private:
   /*! \brief The git repository. */
   Git git_;
+  corvus::pSourceManager sm_;
 
   /*! \class ChildIndex
    *  \brief Index usable as a key to a map, that identifies a child/row

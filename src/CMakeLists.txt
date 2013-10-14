@@ -1,8 +1,8 @@
 MESSAGE( STATUS "caw src check" )
 
 set(CAW_SRC_FILES
-    cawView.cpp
-    cawModel.cpp
+    mainView.cpp
+    sourceTreeModel.cpp
     SourceView.cpp
     Git.cpp
 )

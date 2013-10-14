@@ -76,6 +76,10 @@ std::string getLanguageFromFileExtension(const std::string &fileName)
     return "javascript";
   else if (boost::iends_with(fileName, ".css")) 
     return "css";
+  else if (boost::iends_with(fileName, ".php"))
+    return "php";
+  else if (boost::iends_with(fileName, ".inc"))
+    return "php";
   else
     return std::string();
 } 

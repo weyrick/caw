@@ -20,17 +20,10 @@
 #include <Wt/WVBoxLayout>
 #include <Wt/WViewWidget>
 
-#include <corvus/pSourceManager.h>
-
-#include "cawModel.h"
+#include "sourceTreeModel.h"
 #include "SourceView.h"
 
 using namespace Wt;
-
-/**
- * \defgroup gitmodelexample Git model example
- */
-/*@{*/
 
 /*! \class GitViewApplication
  *  \brief A simple application to navigate a git repository.
@@ -38,12 +31,12 @@ using namespace Wt;
  * This examples demonstrates how to use the custom model use GitModel
  * with a WTreeView.
  */
-class GitViewApplication : public WApplication
+class CawApplication : public WApplication
 {
 public:
   /*! \brief Constructor.
    */
-  GitViewApplication(const WEnvironment& env) 
+  CawApplication(const WEnvironment& env)
     : WApplication(env)
   {
     useStyleSheet("resources/caw.css");
@@ -57,14 +50,14 @@ public:
 		    , 0, 1, AlignLeft);
     grid->addWidget(repositoryError_ = new WText(), 0, 2);
 
-    repositoryEdit_->setTextSize(50);
+    repositoryEdit_->setTextSize(100);
     repositoryError_->setStyleClass("error-msg");
 
     repositoryEdit_->enterPressed()
-      .connect(this, &GitViewApplication::loadGitModel);
+      .connect(this, &CawApplication::loadGitModel);
 
-    WPushButton *b = new WPushButton("Load");
-    b->clicked().connect(this, &GitViewApplication::loadGitModel);
+    WPushButton *b = new WPushButton("Refresh");
+    b->clicked().connect(this, &CawApplication::loadGitModel);
     grid->addWidget(b, 2, 0, AlignLeft);
 
     gitView_ = new WTreeView();
@@ -72,7 +65,7 @@ public:
     gitView_->setSortingEnabled(false);
     gitView_->setModel(gitModel_ = new GitModel(this));
     gitView_->setSelectionMode(SingleSelection);
-    gitView_->selectionChanged().connect(this, &GitViewApplication::showFile);
+    gitView_->selectionChanged().connect(this, &CawApplication::showFile);
 
     sourceView_ = new SourceView(DisplayRole, 
 				 GitModel::ContentsRole, 
@@ -124,7 +117,7 @@ private:
     sourceView_->setIndex(WModelIndex());
     repositoryError_->setText("");
     try {
-      gitModel_->setRepositoryPath(repositoryEdit_->text().toUTF8());
+      gitModel_->setConfigPath(repositoryEdit_->text().toUTF8());
     } catch (const Git::Exception& e) {
       repositoryError_->setText(e.what());
     }
@@ -141,9 +134,9 @@ private:
   }
 };
 
-WApplication *createApplication(const WEnvironment& env)
+CawApplication *createApplication(const WEnvironment& env)
 {
-  return new GitViewApplication(env);
+  return new CawApplication(env);
 }
 
 int main(int argc, char **argv)
@@ -151,4 +144,3 @@ int main(int argc, char **argv)
   return WRun(argc, argv, &createApplication);
 }
 
-/*@}*/
