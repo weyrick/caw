@@ -12,6 +12,6 @@ add_executable(caw ${CAW_SRC_FILES} )
 TARGET_LINK_LIBRARIES( caw
   ${Wt_DEBUG_LIBRARIES}
   ${Boost_LIBRARIES}
-  ${Corvus_LIBRARIES}
+  ${CORVUS_LIBRARY}
 )
 

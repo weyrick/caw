@@ -18,7 +18,7 @@ MESSAGE( STATUS "CMAKE_SYSTEM_PROCESSOR: " ${CMAKE_SYSTEM_PROCESSOR} )
 set(Boost_DETAILED_FAILURE_MSG TRUE)
 Find_Package(Boost REQUIRED COMPONENTS system signals filesystem date_time)
 Find_Package(Wt REQUIRED)
-#Find_Package(Corvus REQUIRED)
+Find_Package(Corvus REQUIRED)
 
 IF( Boost_VERSION LESS ${BOOST_MIN_VERSION} )
   MESSAGE(FATAL_ERROR "Boost version ${Boost_VERSION} too old, please install ${BOOST_MIN_VERSION_TEXT} or greater!")
@@ -26,7 +26,7 @@ ENDIF( Boost_VERSION LESS ${BOOST_MIN_VERSION} )
 
 
 INCLUDE_DIRECTORIES( ${Wt_INCLUDE_DIR}
-                     ${Corvus_INCLUDE_DIR}
+                     ${CORVUS_INCLUDE_DIR}
                      ${Boost_INCLUDE_DIRS}
 )
 
