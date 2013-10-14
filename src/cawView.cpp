@@ -20,6 +20,8 @@
 #include <Wt/WVBoxLayout>
 #include <Wt/WViewWidget>
 
+#include <corvus/pSourceManager.h>
+
 #include "cawModel.h"
 #include "SourceView.h"
 
@@ -45,27 +47,20 @@ public:
     : WApplication(env)
   {
     useStyleSheet("resources/caw.css");
-    setTitle("Git model example");
+    setTitle("caW: Corvus UI");
 
-    const char *gitRepo = getenv("GITVIEW_REPOSITORY_PATH");
+    const char *corvusConfig = getenv("CORVUS_CONFIG_PATH");
 
     WGridLayout *grid = new WGridLayout();
-    grid->addWidget(new WText("Git repository path:"), 0, 0);
-    grid->addWidget(repositoryEdit_ = new WLineEdit(gitRepo ? gitRepo : "")
+    grid->addWidget(new WText("Corvus config file path:"), 0, 0);
+    grid->addWidget(repositoryEdit_ = new WLineEdit(corvusConfig ? corvusConfig : "")
 		    , 0, 1, AlignLeft);
     grid->addWidget(repositoryError_ = new WText(), 0, 2);
-    grid->addWidget(new WText("Revision:"), 1, 0);
-    grid->addWidget(revisionEdit_ = new WLineEdit("master"), 1, 1, AlignLeft);
-    grid->addWidget(revisionError_ = new WText(), 1, 2);
 
-    repositoryEdit_->setTextSize(30);
-    revisionEdit_->setTextSize(20);
+    repositoryEdit_->setTextSize(50);
     repositoryError_->setStyleClass("error-msg");
-    revisionError_->setStyleClass("error-msg");
 
     repositoryEdit_->enterPressed()
-      .connect(this, &GitViewApplication::loadGitModel);
-    revisionEdit_->enterPressed()
       .connect(this, &GitViewApplication::loadGitModel);
 
     WPushButton *b = new WPushButton("Load");
@@ -117,8 +112,8 @@ public:
   }
 
 private:
-  WLineEdit  *repositoryEdit_, *revisionEdit_;
-  WText      *repositoryError_, *revisionError_;
+  WLineEdit  *repositoryEdit_;
+  WText      *repositoryError_;
   GitModel   *gitModel_;
   WTreeView  *gitView_;
   SourceView *sourceView_;
@@ -128,14 +123,8 @@ private:
   void loadGitModel() {
     sourceView_->setIndex(WModelIndex());
     repositoryError_->setText("");
-    revisionError_->setText("");
     try {
       gitModel_->setRepositoryPath(repositoryEdit_->text().toUTF8());
-      try {
-	gitModel_->loadRevision(revisionEdit_->text().toUTF8());
-      } catch (const Git::Exception& e) {
-	revisionError_->setText(e.what());
-      }
     } catch (const Git::Exception& e) {
       repositoryError_->setText(e.what());
     }

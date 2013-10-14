@@ -18,6 +18,7 @@ MESSAGE( STATUS "CMAKE_SYSTEM_PROCESSOR: " ${CMAKE_SYSTEM_PROCESSOR} )
 set(Boost_DETAILED_FAILURE_MSG TRUE)
 Find_Package(Boost REQUIRED COMPONENTS system signals filesystem date_time)
 Find_Package(Wt REQUIRED)
+Find_Package(LLVM REQUIRED) # transitive from corvus
 Find_Package(Corvus REQUIRED)
 
 IF( Boost_VERSION LESS ${BOOST_MIN_VERSION} )
@@ -28,6 +29,7 @@ ENDIF( Boost_VERSION LESS ${BOOST_MIN_VERSION} )
 INCLUDE_DIRECTORIES( ${Wt_INCLUDE_DIR}
                      ${CORVUS_INCLUDE_DIR}
                      ${Boost_INCLUDE_DIRS}
+                     ${LLVM_INCLUDE_DIR}
 )
 
 add_subdirectory(src)

@@ -7,6 +7,10 @@ set(CAW_SRC_FILES
     Git.cpp
 )
 
+set_source_files_properties( ${CAW_SRC_FILES}
+                             PROPERTIES COMPILE_FLAGS ${LLVM_COMPILE_FLAGS}
+                            )
+
 add_executable(caw ${CAW_SRC_FILES} )
 
 TARGET_LINK_LIBRARIES( caw
