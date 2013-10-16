@@ -21,60 +21,20 @@ GitModel::GitModel(WObject *parent)
 void GitModel::setConfigPath(const std::string& configPath)
 {
 
-    std::vector<std::string> inputFiles;
-
     pConfig config;
-    config.exts = "php";
     char *home = getenv("HOME");
     if (home) {
         // will ignore if not found
         Wt::log("info") << "[config] reading home .corvus";
         pConfigMgr::read(pStringRef(home)+"/.corvus", config);
     }
+
+    Wt::log("info") << "[config] reading " << configPath;
     if (!pConfigMgr::read(configPath, config)) {
-        Wt::log("info") << "[config] reading " << configPath;
         throw new std::runtime_error("unable to load config file");
     }
 
-    //sm_.setDebug(verbosity, debugParse, debugModel, debugDiags);
-
-    // set values from config
-    if (!config.dbName.empty()) {
-        Wt::log("info") << "[config] setting db name: " << config.dbName;
-        sm_.setModelDBName(config.dbName);
-    }
-    if (!config.includePaths.empty()) {
-        for (unsigned i = 0; i != config.includePaths.size(); ++i) {
-            Wt::log("info") << "[config] adding include path: " << config.includePaths[i];
-            sm_.addIncludeDir(config.includePaths[i], config.exts);
-        }
-    }
-
-    bool haveSourceFromConfig = false;
-    if (!config.inputFiles.empty()) {
-        haveSourceFromConfig = true;
-        for (unsigned i = 0; i != config.inputFiles.size(); ++i) {
-            Wt::log("info") << "[config] adding input file: " << config.inputFiles[i];
-            inputFiles.push_back(config.inputFiles[i]);
-        }
-    }
-
-    if (inputFiles.empty()) {
-        return;
-    }
-
-    for (unsigned i = 0; i != inputFiles.size(); ++i) {
-
-        sys::fs::file_status stat;
-        sys::fs::status(inputFiles[i], stat);
-        if (sys::fs::is_directory(stat))
-            sm_.addSourceDir(inputFiles[i], config.exts);
-        else if (sys::fs::is_regular_file(stat))
-            sm_.addSourceFile(inputFiles[i]);
-        else
-            Wt::log("error") << "skipping unknown path: " << inputFiles[i];
-
-    }
+    sm_.configure(config);
 
     //sm.refreshModel(graphFileName);
     //sm.runDiagnostics();
