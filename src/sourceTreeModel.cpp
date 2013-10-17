@@ -6,13 +6,12 @@
 
 #include <Wt/WLogger>
 #include <corvus/pConfig.h>
-#include <llvm/Support/FileSystem.h>
+#include <boost/filesystem.hpp>
 
 #include "sourceTreeModel.h"
 
 using namespace Wt;
 using namespace corvus;
-using namespace llvm;
 
 GitModel::GitModel(WObject *parent)
   : WAbstractItemModel(parent)
@@ -34,9 +33,15 @@ void GitModel::setConfigPath(const std::string& configPath)
         throw new std::runtime_error("unable to load config file");
     }
 
+    config.verbosity = 1;
+    sm_.setLogStream(&std::cerr);
+    boost::filesystem::path cpath(configPath);
+    config.rootDir = cpath.parent_path().string();
     sm_.configure(config);
 
-    //sm.refreshModel(graphFileName);
+    Wt::log("info") << "[model] start refresh";
+    sm_.refreshModel();
+    Wt::log("info") << "[model] done refresh";
     //sm.runDiagnostics();
 
 }
